@@ -3,12 +3,15 @@ local M = {}
 local api = vim.api
 
 -- skip scratch buffer or unkown filetype, nvim's terminal window, and other known filetypes need to bypass
-local bypass_ft = {'', 'bin', 'vim-plug', 'LuaTree', 'nerdtree'}
+local bypass_ft = {'', 'bin', '.', 'vim-plug', 'LuaTree', 'startify', 'nerdtree'}
 
 function M.blameVirtText()
-  local ft = vim.fn.expand('%:h:t') -- get the current file extension
+  if vim.bo.buftype ~= '' then
+    return
+  end
+
   for _,v in ipairs(bypass_ft) do
-    if ft == v then
+    if vim.bo.filetype == v then
       return
     end
   end
