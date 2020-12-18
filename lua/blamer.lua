@@ -1,14 +1,18 @@
 -- in blamer.lua
 local M = {}
 local api = vim.api
+
+-- skip scratch buffer or unkown filetype, nvim's terminal window, and other known filetypes need to bypass
+local bypass_ft = {'', 'bin', 'vim-plug', 'LuaTree', 'nerdtree'}
+
 function M.blameVirtText()
   local ft = vim.fn.expand('%:h:t') -- get the current file extension
-  if ft == '' then -- if we are in a scratch buffer or unknown filetype
-    return
+  for _,v in ipairs(bypass_ft) do
+    if ft == v then
+      return
+    end
   end
-  if ft == 'bin' then -- if we are in nvim's terminal window
-    return
-  end
+
   api.nvim_buf_clear_namespace(0, 2, 0, -1) -- clear out virtual text from namespace 2 (the namespace we will set later)
   local currFile = vim.fn.expand('%')
   local line = api.nvim_win_get_cursor(0)
