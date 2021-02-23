@@ -40,12 +40,20 @@ EOF
 ```lua
 {
     enable = false,  -- you must set this to true in order to show the blame info
-    prefix = ' ', -- you can cusomize it to any emoji, even disable it, just set ti empty lua string
+    prefix = '  ', -- you can cusomize it to any thing, unicode emoji, even disable it, just set to empty lua string
     format = '%committer │ %committer-time %committer-tz │ %summary',
     auto_hide = false, -- set this to true will enable delay hide even you do not have the cursor moved
     hide_delay = 3000, -- this is the delay time in milliseconds for delay auto hide
 }
 ```
+here are some emoji candicates:
+
+`\uF1D3`  
+
+`\uE80D`  
+
+`\uF417`  
+
 
 ## availabe template vars
 
