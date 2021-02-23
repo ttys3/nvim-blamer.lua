@@ -9,8 +9,8 @@ local hi_name = 'NvimBlamerInfo'
 
 local config = {
     enable = false,
-    prefix = '🐛 ',
-    format = '%committer | %committer-time %committer-tz | %summary',
+    prefix = ' ',
+    format = '%committer │ %committer-time %committer-tz │ %summary',
     auto_hide = false,
     hide_delay = 3000,
 }

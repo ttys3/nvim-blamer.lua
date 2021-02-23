@@ -28,7 +28,7 @@ lua <<EOF
 
 require'nvim-blamer'.setup({
     enable = true,
-    format = '%committer | %committer-time-human | %summary',
+    format = '%committer │ %committer-time-human │ %summary',
 })
 
 EOF
@@ -40,8 +40,8 @@ EOF
 ```lua
 {
     enable = false,
-    prefix = '🐛 ',
-    format = '%committer | %committer-time %committer-tz | %summary',
+    prefix = ' ',
+    format = '%committer │ %committer-time %committer-tz │ %summary',
     auto_hide = false,
     hide_delay = 3000,
 }
