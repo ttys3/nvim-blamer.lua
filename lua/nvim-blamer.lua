@@ -3,7 +3,7 @@
 local M = {}
 local api = vim.api
 
-local util = require 'util'
+local util = require('util')
 
 local hi_name = 'NvimBlamerInfo'
 

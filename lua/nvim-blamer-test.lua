@@ -1,7 +1,6 @@
 #!/usr/bin/env lua
-
 local json = require('dkjson')
-local util = require 'util'
+local util = require('util')
 
 local get_blame_info_emulate = function()
     local command = "git --no-pager blame -L 3,+1 --line-porcelain blamer.lua"
@@ -9,7 +8,7 @@ local get_blame_info_emulate = function()
     local handle = io.popen(command)
     local lines = handle:read("*a")
     handle:close()
-return lines
+    return lines
 end
 
 -- test time_to_human
