@@ -90,8 +90,9 @@ you can use `filename`, `hash`, `summary`, `committer`, `committer-mail`, `commi
 
 ## credits
 
-code mainly from https://www.reddit.com/r/neovim/comments/f1vxhl/replicate_the_basic_functionality_vscodes_gitlens/
+thanks for the unicode emoji from <https://github.com/romkatv/powerlevel10k/blob/3920940ea84f6fba767cbed3fe6ba0653411c706/internal/icons.zsh#L226>
 
+the idea and the init code come from https://www.reddit.com/r/neovim/comments/f1vxhl/replicate_the_basic_functionality_vscodes_gitlens/
 https://teukka.tech/vimtip-gitlens.html
 
 
