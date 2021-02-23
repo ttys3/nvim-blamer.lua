@@ -84,3 +84,14 @@ you can use `filename`, `hash`, `summary`, `committer`, `committer-mail`, `commi
 code mainly from https://www.reddit.com/r/neovim/comments/f1vxhl/replicate_the_basic_functionality_vscodes_gitlens/
 
 https://teukka.tech/vimtip-gitlens.html
+
+
+## related works
+
+<https://github.com/APZelos/blamer.nvim>
+
+<https://github.com/f-person/git-blame.nvim>
+
+<https://github.com/tveskag/nvim-blame-line>
+
+<https://github.com/zivyangll/git-blame.vim>
