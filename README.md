@@ -54,6 +54,7 @@ here are some emoji candicates:
 
 `\uF417`  
 
+you may need install some patched font to use unicode emoji, like NerdFont <https://github.com/ryanoasis/nerd-fonts>
 
 ## availabe template vars
 
