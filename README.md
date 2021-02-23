@@ -20,7 +20,7 @@ Plug 'ttys3/nvim-blamer.lua'
 
 """ must after plugin loaded, for example,
 """ if you are using vim-plug, this should put after `call plug#end()`
-
+""" enable auto show blame info when cursor move
 call nvimblamer#auto()
 
 """ config the plugin
