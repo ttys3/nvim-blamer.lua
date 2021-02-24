@@ -54,7 +54,7 @@ local git_not_committed_hash = '0000000000000000000000000000000000000000'
 -- }
 
 local get_blame_info_impl = function(filename, line_num)
-    return vim.fn.system(string.format('git --no-pager blame --line-porcelain -L %d,+1 %s', line_num, filename))
+    return vim.fn.system(string.format('LC_ALL=C git --no-pager blame --line-porcelain -L %d,+1 %s', line_num, filename))
 end
 
 -- git_blame_line_info returns (blame_info, error)
