@@ -1,37 +1,59 @@
 #!/usr/bin/env lua
-local time_units = {
-    { name = ' second', value = 1, max = 60, single = 'a second' },
-    { name = ' minute', value = 60, max = 60, single = 'a minute' },
-    { name = ' hour', value = 3600, max = 23, single = 'an hour' },
-    { name = ' day', value = 86400, max = 6, single = 'a day' },
-    { name = ' week', value = 604800, max = 3.5, single = 'a week' },
-    { name = ' month', value = 2592000, max = 11, single = 'a month' },
-    { name = ' year', value = 31536000, max = 0xfffffffffffffff, single = 'a year' },
-}
+-- show_date_relative port from git blame.c
+function show_date_relative(timestamp)
+    local diff
+    local now = os.time()
 
-local time_to_human = function(ts)
-    local diff = os.time() - tonumber(ts)
-
-    if diff <= 0 then
-        return 'in the future' .. tonumber(ts) .. '|' .. os.time()
+    if (now < timestamp) then
+        return "in the future"
     end
 
-    local suffix = ' ago'
+    diff = now - timestamp
 
-    for i = 1, #time_units, 1 do
-        local unit = time_units[i]
+    if (diff < 90) then
+        return diff .. " seconds ago"
+    end
+    -- /* Turn it into minutes */
+    diff = (diff + 30) / 60
+    if (diff < 90) then
+        return diff .. " minutes ago"
+    end
 
-        if (diff <= unit.max * unit.value) then
-            local t = math.floor(diff / unit.value)
-            if t == 1 then
-                return unit.single .. suffix
-            else
-                return t .. unit.name .. 's' .. suffix
-            end
+    -- /* Turn it into hours */
+    diff = (diff + 30) / 60
+    if (diff < 36) then
+        return diff .. " hours ago"
+    end
+    -- /* We deal with number of days from here on */
+    diff = (diff + 12) / 24
+    if (diff < 14) then
+        return diff .. " days ago"
+    end
+    -- /* Say weeks for the past 10 weeks or so */
+    if (diff < 70) then
+        return ((diff + 3) / 7) .. " weeks ago"
+    end
+
+    -- /* Say months for the past 12 months or so */
+    if (diff < 365) then
+        return ((diff + 15) / 30) .. " months ago"
+    end
+
+    -- /* Give years and months for 5 years or so */
+    if (diff < 1825) then
+        local totalmonths = (diff * 12 * 2 + 365) / (365 * 2)
+        local years = totalmonths / 12
+        local months = totalmonths % 12
+        if (months) then
+            local sb = years .. " years, " .. months(" months ago")
+            return sb
+        else
+            local sb = years .. " years ago"
+            return sb
         end
     end
-
-    return "seconds ago"
+    -- /* Otherwise, just years. Centuries is probably overkill. */
+    return ((diff + 183) / 365) .. " years ago"
 end
 
 -- Not Committed Yet
@@ -91,7 +113,7 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
                 blame_info.hash = field
             else
                 if field:match('time') then
-                    blame_info[k .. '-human'] = time_to_human(v)
+                    blame_info[k .. '-human'] = show_date_relative(v)
                     blame_info[k] = os.date('%Y-%m-%d %H:%M:%S', v)
                 else
                     blame_info[k] = v
@@ -113,7 +135,7 @@ end
 
 local M = {
     git_blame_line_info = git_blame_line_info,
-    time_to_human = time_to_human,
+    show_date_relative = show_date_relative,
 }
 
 return M

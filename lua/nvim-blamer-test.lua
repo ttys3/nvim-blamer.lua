@@ -9,8 +9,10 @@ end
 
 test_outside_repo_err()
 
+--------------------------------
+
 local get_blame_info_emulate = function()
-    local command = "git --no-pager blame -L 3,+1 --line-porcelain blamer.lua"
+    local command = "LC_ALL=C git --no-pager blame -L 3,+1 --line-porcelain blamer.lua"
     -- local command = "git --no-pager blame -L 41,+1 --line-porcelain blamer.lua"
     local handle = io.popen(command)
     local lines = handle:read("*a")
@@ -18,11 +20,13 @@ local get_blame_info_emulate = function()
     return lines
 end
 
--- test time_to_human
-print(util.time_to_human(os.time() + 3600 * 24 * 40))
+-- test show_date_relative
+print(util.show_date_relative(os.time() - 3600 * 24 * 40))
+
+--------------------------------
 
 -- test git_blame_line_info
-local blame_info, err = util.git_blame_line_info('blamer.lua', 3, get_blame_info_emulate)
+local blame_info, err = util.git_blame_line_info('nvim-blamer.lua', 3, get_blame_info_emulate)
 
 if err ~= nil then
     print(err)
