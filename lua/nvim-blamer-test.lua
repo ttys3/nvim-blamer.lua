@@ -4,7 +4,7 @@ local util = require('util')
 
 function test_outside_repo_err()
     err = "fatal: '/home/ttys3/.ideavimrc' is outside repository at '/home/xxxx'"
-    print(err:match("^fatal: .* is outside repository at"))
+    print('test outside repo err match: ' .. err:match("^fatal: .* is outside repository at"))
 end
 
 test_outside_repo_err()
@@ -12,11 +12,12 @@ test_outside_repo_err()
 --------------------------------
 
 local get_blame_info_emulate = function()
-    local command = "LC_ALL=C git --no-pager blame -L 3,+1 --line-porcelain blamer.lua"
+    local command = "LC_ALL=C git --no-pager blame -L 3,+1 --line-porcelain nvim-blamer.lua"
     -- local command = "git --no-pager blame -L 41,+1 --line-porcelain blamer.lua"
     local handle = io.popen(command)
     local lines = handle:read("*a")
     handle:close()
+    print("\n[debug] got blame line info: -------- \n\n" .. lines .. "\n -------- \n\n")
     return lines
 end
 
@@ -33,7 +34,7 @@ if err ~= nil then
     os.exit(0)
 end
 
-print(json.encode(blame_info))
+print("\ngot blame info: \n" .. json.encode(blame_info))
 
 local config = {
     enable = false,
@@ -47,4 +48,11 @@ text = text .. string.gsub(config.format, "%%([a-z-]+)", function(field)
     return blame_info[field]
 end)
 
-print(text)
+print("\ngot result line mysql date: " .. text)
+
+config.format = '%committer | %committer-time-human | %summary'
+text = config.prefix
+text = text .. string.gsub(config.format, "%%([a-z-]+)", function(field)
+    return blame_info[field]
+end)
+print("\ngot result line human date: " .. text)
