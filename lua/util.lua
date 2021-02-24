@@ -4,6 +4,7 @@ function show_date_relative(timestamp)
     local diff
     local now = os.time()
 
+    timestamp = tonumber(timestamp)
     if (now < timestamp) then
         return "in the future"
     end
@@ -14,36 +15,38 @@ function show_date_relative(timestamp)
         return diff .. " seconds ago"
     end
     -- /* Turn it into minutes */
-    diff = (diff + 30) / 60
+    diff = math.floor((diff + 30) / 60)
     if (diff < 90) then
         return diff .. " minutes ago"
     end
 
     -- /* Turn it into hours */
-    diff = (diff + 30) / 60
+    diff = math.floor((diff + 30) / 60)
     if (diff < 36) then
         return diff .. " hours ago"
     end
+
     -- /* We deal with number of days from here on */
-    diff = (diff + 12) / 24
+    diff = math.floor((diff + 12) / 24)
     if (diff < 14) then
         return diff .. " days ago"
     end
+
     -- /* Say weeks for the past 10 weeks or so */
     if (diff < 70) then
-        return ((diff + 3) / 7) .. " weeks ago"
+        return math.floor((diff + 3) / 7) .. " weeks ago"
     end
 
     -- /* Say months for the past 12 months or so */
     if (diff < 365) then
-        return ((diff + 15) / 30) .. " months ago"
+        return math.floor((diff + 15) / 30) .. " months ago"
     end
 
     -- /* Give years and months for 5 years or so */
     if (diff < 1825) then
         local totalmonths = (diff * 12 * 2 + 365) / (365 * 2)
-        local years = totalmonths / 12
-        local months = totalmonths % 12
+        local years = math.floor(totalmonths / 12)
+        local months = math.floor(totalmonths % 12)
         if (months) then
             local sb = years .. " years, " .. months(" months ago")
             return sb
@@ -53,7 +56,7 @@ function show_date_relative(timestamp)
         end
     end
     -- /* Otherwise, just years. Centuries is probably overkill. */
-    return ((diff + 183) / 365) .. " years ago"
+    return math.floor((diff + 183) / 365) .. " years ago"
 end
 
 -- Not Committed Yet
@@ -88,6 +91,8 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
         get_blame_info = get_blame_info_impl
     end
     local lines = get_blame_info(filename, line_num)
+
+    -- print(lines)
 
     local err = nil
 
