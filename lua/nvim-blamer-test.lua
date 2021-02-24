@@ -2,6 +2,13 @@
 local json = require('dkjson')
 local util = require('util')
 
+function test_outside_repo_err()
+    err = "fatal: '/home/ttys3/.ideavimrc' is outside repository at '/home/xxxx'"
+    print(err:match("^fatal: .* is outside repository at"))
+end
+
+test_outside_repo_err()
+
 local get_blame_info_emulate = function()
     local command = "git --no-pager blame -L 3,+1 --line-porcelain blamer.lua"
     -- local command = "git --no-pager blame -L 41,+1 --line-porcelain blamer.lua"

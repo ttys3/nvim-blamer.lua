@@ -71,7 +71,7 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
 
     -- errors that should ignored
     local lower_lines = lines:lower()
-    if lower_lines:match('^fatal: no such path') or lower_lines:match('^fatal: cannot stat path') or lower_lines:match('^fatal: not a git repository') then
+    if lower_lines:match("^fatal: no such path") or lower_lines:match("^fatal: cannot stat path") or lower_lines:match("^fatal: not a git repository") or lower_lines:match("^fatal: .* is outside repository at") then
         -- vim.api.nvim_command('echomsg "the whole file not committed or not git repo"')
         return nil, err
     end
