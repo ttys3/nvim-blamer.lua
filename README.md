@@ -46,15 +46,22 @@ EOF
     hide_delay = 3000, -- this is the delay time in milliseconds for delay auto hide
 }
 ```
-here are some emoji candicates:
-
-`\uF1D3`  
-
-`\uE80D`  
-
-`\uF417`  
 
 you may need install some patched font to use unicode emoji, like NerdFont <https://github.com/ryanoasis/nerd-fonts>
+
+you can find your favorite emoji using <https://www.nerdfonts.com/cheat-sheet>
+
+here are some emoji candicates:
+
+`\uE702` 
+
+`\uF1D2` 
+
+`\uF1D3` 
+
+`\uE80D` 
+
+`\uF417` 
 
 ## availabe template vars
 
