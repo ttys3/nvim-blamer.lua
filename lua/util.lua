@@ -48,7 +48,7 @@ function show_date_relative(timestamp)
         local years = math.floor(totalmonths / 12)
         local months = math.floor(totalmonths % 12)
         if (months) then
-            local sb = years .. " years, " .. months(" months ago")
+            local sb = years .. " years, " .. months .. (" months ago")
             return sb
         else
             local sb = years .. " years ago"
