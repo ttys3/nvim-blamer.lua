@@ -2,6 +2,12 @@
 
 ![nvim-blamer-lua](nvim-blamer-lua.png)
 
+## requirement
+
+neovim version: >= 0.5.0-dev ( or nightly version )
+
+the `git` cli must exists in your system and in `PATH` env
+
 ## features
 
 - configuable message format
