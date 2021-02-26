@@ -129,7 +129,7 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
     end
 
     -- uncaught or unexpected error
-    if lines:find("fatal") then -- if the call to git show fails
+    if lines:match("^fatal|^error") then -- if the call to git show fails
         err = 'nvim-blamer.lua unexpected err: ' .. lines
     elseif not blame_info.hash then
         err = 'nvim-blamer.lua unexpected err: failed to get hash'
