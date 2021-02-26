@@ -7,6 +7,9 @@ local util = require('util')
 
 local hi_name = 'NvimBlamerInfo'
 
+-- virtual text namespace id
+local ns_id = 0
+
 local config = {
     enable = false,
     prefix = '  ',
@@ -37,8 +40,8 @@ function M.show()
         end
     end
 
-    -- clear out virtual text from namespace 2 (the namespace we will set later)
-    api.nvim_buf_clear_namespace(0, 2, 0, -1)
+    -- clear out virtual text from namespace ns_id (the namespace we will set later)
+    M.clear()
 
     local buf = vim.fn.bufnr('') or 0
     local line = api.nvim_win_get_cursor(0)
@@ -58,19 +61,19 @@ function M.show()
         return
     end
     -- set virtual text for namespace 2 with the content from git and assign it to the higlight group 'GitLens'
-    api.nvim_buf_set_virtual_text(buf, 2, line[1] - 1, { { text, hi_name } }, {})
+    -- https://neovim.io/doc/user/api.html#nvim_buf_set_virtual_text()
+    ns_id = api.nvim_create_namespace('NvimBlamer')
+    api.nvim_buf_set_virtual_text(buf, ns_id, line[1] - 1, { { text, hi_name } }, {})
     if config.auto_hide then
-        vim.fn.timer_start(config.hide_delay, function()
-            api.nvim_buf_clear_namespace(buf, 2, 0, -1)
-        end)
+        vim.fn.timer_start(config.hide_delay, M.clear)
     end
 end
 
 function M.clear() -- important for clearing out the text when our cursor moves
-    if not config.enable then
-        return
+    if ns_id > 0 then
+        api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+        ns_id = 0
     end
-    api.nvim_buf_clear_namespace(0, 2, 0, -1)
 end
 
 function M.enable()
