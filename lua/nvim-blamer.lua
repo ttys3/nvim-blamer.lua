@@ -16,6 +16,7 @@ local config = {
     format = '%committer │ %committer-time %committer-tz │ %summary',
     auto_hide = false,
     hide_delay = 3000,
+    show_error = false,
 }
 
 -- skip scratch buffer or unkown filetype, nvim's terminal window, and other known filetypes need to bypass
@@ -50,7 +51,11 @@ function M.show()
     local blame_info, err = util.git_blame_line_info(filename, line[1])
 
     if err ~= nil then
-        text = err
+        if not config.show_error then
+            return
+        else
+            text = err
+        end
     elseif blame_info ~= nil then
         text = config.prefix
         text = text .. string.gsub(config.format, "%%([a-z-]+)", function(field)

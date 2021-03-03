@@ -50,6 +50,7 @@ EOF
     format = '%committer │ %committer-time %committer-tz │ %summary',
     auto_hide = false, -- set this to true will enable delay hide even you do not have the cursor moved
     hide_delay = 3000, -- this is the delay time in milliseconds for delay auto hide
+    show_error = false, -- set to true to show any possible error (just for debug problems)
 }
 ```
 

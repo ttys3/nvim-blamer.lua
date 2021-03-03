@@ -98,7 +98,11 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
 
     -- errors that should ignored
     local lower_lines = lines:lower()
-    if lower_lines:match("^fatal: no such path") or lower_lines:match("^fatal: cannot stat path") or lower_lines:match("^fatal: not a git repository") or lower_lines:match("^fatal: .* is outside repository at") then
+    if lower_lines:match("^fatal: no such path") or 
+    lower_lines:match("^fatal: no such ref") or 
+    lower_lines:match("^fatal: cannot stat path") or 
+    lower_lines:match("^fatal: not a git repository") or 
+    lower_lines:match("^fatal: .* is outside repository at") then
         -- vim.api.nvim_command('echomsg "the whole file not committed or not git repo"')
         return nil, err
     end
@@ -129,10 +133,10 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
     end
 
     -- uncaught or unexpected error
-    if lines:match("^fatal|^error") then -- if the call to git show fails
-        err = 'nvim-blamer.lua unexpected err: ' .. lines
+    if lines:match("^fatal") or lines:match("^error") then -- if the call to git show fails
+        err = "nvim-blamer.lua: unexpected err=" .. lines
     elseif not blame_info.hash then
-        err = 'nvim-blamer.lua unexpected err: failed to get hash'
+        err = "nvim-blamer.lua: failed to get hash, out=" .. lines
     end
 
     return blame_info, err
