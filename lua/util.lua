@@ -1,10 +1,13 @@
 #!/usr/bin/env lua
 -- show_date_relative port from git blame.c
-function show_date_relative(timestamp)
+function show_date_relative(ts)
     local diff
     local now = os.time()
 
-    timestamp = tonumber(timestamp)
+    local timestamp = tonumber(ts)
+    if timestamp == nil then
+        return ts
+    end
     if (now < timestamp) then
         return "in the future"
     end
