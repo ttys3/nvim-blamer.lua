@@ -124,7 +124,7 @@ local git_blame_line_info = function(filename, line_num, get_blame_info)
             if field:len() == 40 then
                 blame_info.hash = field
             else
-                if field:match('time') then
+                if field == 'author-time' or field == 'committer-time' then
                     blame_info[k .. '-human'] = show_date_relative(v)
                     blame_info[k] = os.date('%Y-%m-%d %H:%M:%S', v)
                 else
