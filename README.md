@@ -78,6 +78,7 @@ you can use `filename`, `hash`, `summary`, `committer`, `committer-mail`, `commi
 {
   "filename": "lua/blamer.lua",
   "hash": "db43ae622dbec1ba3fd8172c2d4fed1b2980c39c",
+  "hash-short": "db43ae6",
   "summary": "fix: bypass ft list: rename LuaTree to NvimTree. do not show Not Committed Yet msg",
 
   "committer": "荒野無燈",

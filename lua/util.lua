@@ -1,69 +1,69 @@
 #!/usr/bin/env lua
 -- show_date_relative port from git blame.c
 function show_date_relative(ts)
-    local diff
-    local now = os.time()
+	local diff
+	local now = os.time()
 
-    local timestamp = tonumber(ts)
-    if timestamp == nil then
-        return ts
-    end
-    if (now < timestamp) then
-        return "in the future"
-    end
+	local timestamp = tonumber(ts)
+	if timestamp == nil then
+		return ts
+	end
+	if now < timestamp then
+		return "in the future"
+	end
 
-    diff = now - timestamp
+	diff = now - timestamp
 
-    if (diff < 90) then
-        return diff .. " seconds ago"
-    end
-    -- /* Turn it into minutes */
-    diff = math.floor((diff + 30) / 60)
-    if (diff < 90) then
-        return diff .. " minutes ago"
-    end
+	if diff < 90 then
+		return diff .. " seconds ago"
+	end
+	-- /* Turn it into minutes */
+	diff = math.floor((diff + 30) / 60)
+	if diff < 90 then
+		return diff .. " minutes ago"
+	end
 
-    -- /* Turn it into hours */
-    diff = math.floor((diff + 30) / 60)
-    if (diff < 36) then
-        return diff .. " hours ago"
-    end
+	-- /* Turn it into hours */
+	diff = math.floor((diff + 30) / 60)
+	if diff < 36 then
+		return diff .. " hours ago"
+	end
 
-    -- /* We deal with number of days from here on */
-    diff = math.floor((diff + 12) / 24)
-    if (diff < 14) then
-        return diff .. " days ago"
-    end
+	-- /* We deal with number of days from here on */
+	diff = math.floor((diff + 12) / 24)
+	if diff < 14 then
+		return diff .. " days ago"
+	end
 
-    -- /* Say weeks for the past 10 weeks or so */
-    if (diff < 70) then
-        return math.floor((diff + 3) / 7) .. " weeks ago"
-    end
+	-- /* Say weeks for the past 10 weeks or so */
+	if diff < 70 then
+		return math.floor((diff + 3) / 7) .. " weeks ago"
+	end
 
-    -- /* Say months for the past 12 months or so */
-    if (diff < 365) then
-        return math.floor((diff + 15) / 30) .. " months ago"
-    end
+	-- /* Say months for the past 12 months or so */
+	if diff < 365 then
+		return math.floor((diff + 15) / 30) .. " months ago"
+	end
 
-    -- /* Give years and months for 5 years or so */
-    if (diff < 1825) then
-        local totalmonths = (diff * 12 * 2 + 365) / (365 * 2)
-        local years = math.floor(totalmonths / 12)
-        local months = math.floor(totalmonths % 12)
-        if (months) then
-            local sb = years .. " years, " .. months .. (" months ago")
-            return sb
-        else
-            local sb = years .. " years ago"
-            return sb
-        end
-    end
-    -- /* Otherwise, just years. Centuries is probably overkill. */
-    return math.floor((diff + 183) / 365) .. " years ago"
+	-- /* Give years and months for 5 years or so */
+	if diff < 1825 then
+		local totalmonths = (diff * 12 * 2 + 365) / (365 * 2)
+		local years = math.floor(totalmonths / 12)
+		local months = math.floor(totalmonths % 12)
+		if months then
+			local sb = years .. " years, " .. months .. " months ago"
+			return sb
+		else
+			local sb = years .. " years ago"
+			return sb
+		end
+	end
+	-- /* Otherwise, just years. Centuries is probably overkill. */
+	return math.floor((diff + 183) / 365) .. " years ago"
 end
 
 -- Not Committed Yet
-local git_not_committed_hash = '0000000000000000000000000000000000000000'
+local git_not_committed_hash = "0000000000000000000000000000000000000000"
 
 -- {
 --   "filename": "lua/blamer.lua",
@@ -82,72 +82,74 @@ local git_not_committed_hash = '0000000000000000000000000000000000000000'
 -- }
 
 local get_blame_info_impl = function(filename, line_num)
-    return vim.fn.system(string.format('LC_ALL=C git --no-pager blame --line-porcelain -L %d,+1 %s', line_num, filename))
+	return vim.fn.system(string.format("LC_ALL=C git --no-pager blame --line-porcelain -L %d,+1 %s", line_num, filename))
 end
 
 -- git_blame_line_info returns (blame_info, error)
 local git_blame_line_info = function(filename, line_num, get_blame_info)
-    -- https://git-scm.com/docs/git-blame#Documentation/git-blame.txt--Lltstartgtltendgt
-    -- git --no-pager blame -c --line-porcelain -L <start>,<end> [--] <file>
-    -- If <start> or <end> is a number, it specifies an absolute line number (lines count from 1).
-    if get_blame_info == nil then
-        get_blame_info = get_blame_info_impl
-    end
-    local lines = get_blame_info(filename, line_num)
+	-- https://git-scm.com/docs/git-blame#Documentation/git-blame.txt--Lltstartgtltendgt
+	-- git --no-pager blame -c --line-porcelain -L <start>,<end> [--] <file>
+	-- If <start> or <end> is a number, it specifies an absolute line number (lines count from 1).
+	if get_blame_info == nil then
+		get_blame_info = get_blame_info_impl
+	end
+	local lines = get_blame_info(filename, line_num)
 
-    -- print(lines)
+	-- print(lines)
 
-    local err = nil
+	local err = nil
 
-    -- errors that should ignored
-    local lower_lines = lines:lower()
-    if lower_lines:match("^fatal: no such path") or 
-    lower_lines:match("^fatal: no such ref") or 
-    lower_lines:match("^fatal: cannot stat path") or 
-    lower_lines:match("^fatal: not a git repository") or 
-    lower_lines:match("^fatal: .* is outside repository at") then
-        -- vim.api.nvim_command('echomsg "the whole file not committed or not git repo"')
-        return nil, err
-    end
+	-- errors that should ignored
+	local lower_lines = lines:lower()
+	if
+		lower_lines:match("^fatal: no such path")
+		or lower_lines:match("^fatal: no such ref")
+		or lower_lines:match("^fatal: cannot stat path")
+		or lower_lines:match("^fatal: not a git repository")
+		or lower_lines:match("^fatal: .* is outside repository at")
+	then
+		-- vim.api.nvim_command('echomsg "the whole file not committed or not git repo"')
+		return nil, err
+	end
 
-    -- errors that should ignored
-    if lines:match(git_not_committed_hash) then
-        -- vim.api.nvim_command('echomsg "this line not committed"')
-        return nil, err
-    end
+	-- errors that should ignored
+	if lines:match(git_not_committed_hash) then
+		-- vim.api.nvim_command('echomsg "this line not committed"')
+		return nil, err
+	end
 
-    local blame_info = {}
-    for k, v in lines:gmatch("([a-z0-9-]+) ([^\n]+)\n?") do
-        -- print(k .. ' -> ' .. v)
-        local field = k:match('^([a-z0-9-]+)')
-        if field then
-            if field:len() == 40 then
-                blame_info.hash = field
-            else
-                if field == 'author-time' or field == 'committer-time' then
-                    blame_info[k .. '-human'] = show_date_relative(v)
-                    blame_info[k] = os.date('%Y-%m-%d %H:%M:%S', v)
-                else
-                    blame_info[k] = v
-                end
+	local blame_info = {}
+	for k, v in lines:gmatch("([a-z0-9-]+) ([^\n]+)\n?") do
+		-- print(k .. ' -> ' .. v)
+		local field = k:match("^([a-z0-9-]+)")
+		if field then
+			if field:len() == 40 then
+				blame_info.hash = field
+				blame_info["hash-short"] = string.sub(field, 1, 7)
+			else
+				if field == "author-time" or field == "committer-time" then
+					blame_info[k .. "-human"] = show_date_relative(v)
+					blame_info[k] = os.date("%Y-%m-%d %H:%M:%S", v)
+				else
+					blame_info[k] = v
+				end
+			end
+		end
+	end
 
-            end
-        end
-    end
+	-- uncaught or unexpected error
+	if lines:match("^fatal") or lines:match("^error") then -- if the call to git show fails
+		err = "nvim-blamer.lua: unexpected err=" .. lines
+	elseif not blame_info.hash then
+		err = "nvim-blamer.lua: failed to get hash, out=" .. lines
+	end
 
-    -- uncaught or unexpected error
-    if lines:match("^fatal") or lines:match("^error") then -- if the call to git show fails
-        err = "nvim-blamer.lua: unexpected err=" .. lines
-    elseif not blame_info.hash then
-        err = "nvim-blamer.lua: failed to get hash, out=" .. lines
-    end
-
-    return blame_info, err
+	return blame_info, err
 end
 
 local M = {
-    git_blame_line_info = git_blame_line_info,
-    show_date_relative = show_date_relative,
+	git_blame_line_info = git_blame_line_info,
+	show_date_relative = show_date_relative,
 }
 
 return M
